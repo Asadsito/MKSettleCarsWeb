@@ -35,7 +35,7 @@ export default function HeroSection() {
             transition={{ duration: 0.8 }}
           >
             <span className="inline-block px-4 py-2 bg-[#C9A962]/20 border border-[#C9A962]/40 rounded-full text-[#C9A962] text-sm tracking-widest uppercase mb-8">
-              Quality Car Rental
+              Quality Taxi Rental
             </span>
           </motion.div>
 
@@ -45,8 +45,8 @@ export default function HeroSection() {
             transition={{ duration: 0.8, delay: 0.1 }}
             className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
           >
-            Rent Your
-            <span className="block text-[#C9A962]">Perfect Car</span>
+            Premium
+            <span className="block text-[#C9A962]">Taxi rental</span>
           </motion.h1>
 
           <motion.p
