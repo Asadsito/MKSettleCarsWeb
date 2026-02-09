@@ -116,15 +116,15 @@ export const cars = [
     pricePerDay: "N/A",
     
     pricePerWeek: 250,
-    image: CARPATH + "mx19dgd/c.jpg",
+    image: CARPATH + "mx19dgd/c .jpg",
     gallery: [
-      CARPATH + "mx19dgd/1 (1).jpg",
-      CARPATH + "mx19dgd/1 (2).jpg",
-      CARPATH + "mx19dgd/1 (3).jpg",
-      CARPATH + "mx19dgd/1 (4).jpg",
-      CARPATH + "mx19dgd/1 (5).jpg",
-      CARPATH + "mx19dgd/1 (6).jpg",
-      CARPATH + "mx19dgd/1 (8).jpg"
+      CARPATH + "mx19dgd/1 (1) .jpg",
+      CARPATH + "mx19dgd/1 (2) .jpg",
+      CARPATH + "mx19dgd/1 (3) .jpg",
+      CARPATH + "mx19dgd/1 (4) .jpg",
+      CARPATH + "mx19dgd/1 (5) .jpg",
+      CARPATH + "mx19dgd/1 (6) .jpg",
+      CARPATH + "mx19dgd/1 (8) .jpg"
     ],
     description:
       "The 2019 Toyota Prius is a refined hybrid saloon combining comfort, efficiency, and reliability. Ideal for longer journeys and everyday driving, it delivers a quiet ride with excellent fuel savings.",
@@ -165,14 +165,14 @@ export const cars = [
     category: "SUV",
     pricePerDay: "N/A",
     pricePerWeek: 260,
-    image: CARPATH + "rj21gza/c.png",
+    image: CARPATH + "rj21gza/c .png",
     gallery: [
-      CARPATH + "rj21gza/1 (1).jpg",
-      CARPATH + "rj21gza/1 (1).png",
-      CARPATH + "rj21gza/1 (3).jpg",
-      CARPATH + "rj21gza/1 (3).png",
-      CARPATH + "rj21gza/1 (5).png",
-      CARPATH + "rj21gza/1.jpg"
+      CARPATH + "rj21gza/1 (1) .jpg",
+      CARPATH + "rj21gza/1 (1) .png",
+      CARPATH + "rj21gza/1 (3) .jpg",
+      CARPATH + "rj21gza/1 (3) .png",
+      CARPATH + "rj21gza/1 (5) .png",
+      CARPATH + "rj21gza/1 .jpg"
     ],
     description:
       "The 2021 Kia Niro is a modern hybrid SUV offering a higher driving position, smooth automatic performance, and excellent fuel efficiency. Spacious and comfortable, it’s ideal for families and longer journeys.",
