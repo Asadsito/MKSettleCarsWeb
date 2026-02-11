@@ -149,7 +149,7 @@ export const cars = [
       mpg: "70 MPG"
     },
     available: false,
-    featured: true
+    featured: false
   },
 
   // --------------------------------------------
