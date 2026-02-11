@@ -148,7 +148,7 @@ export const cars = [
       luggage: "2 Large Suitcases",
       mpg: "70 MPG"
     },
-    available: true,
+    available: false,
     featured: true
   },
 
