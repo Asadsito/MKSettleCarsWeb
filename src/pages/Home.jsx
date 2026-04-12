@@ -127,7 +127,7 @@ export default function Home() {
               {
                 number: "02",
                 title: "All included",
-                description: "Insurance, services, tyre changes, MOT and road tax all included in the deal."
+                description: "Insurance, services, MOT and road tax,dash cam all included in the deal."
               },
               {
                 number: "03",
