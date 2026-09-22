@@ -47,7 +47,7 @@ export default function CarDetails() {
     <div className="min-h-screen bg-[#F7F7F5] text-[#111]">
       <Header />
 
-      <section className="pt-28 pb-6">
+      <section className="pt-32 pb-6 md:pt-36">
         <div className="max-w-7xl mx-auto px-5 md:px-8">
           <Link
             to={createPageUrl('Fleet')}

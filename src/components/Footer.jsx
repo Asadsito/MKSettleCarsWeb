@@ -6,28 +6,15 @@ import { ExternalLink } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-[#111111] text-white">
+    <footer className="bg-[#01112B] text-white">
       <div className="max-w-7xl mx-auto px-5 md:px-8 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12">
         <div className="lg:col-span-5">
           <div className="flex items-center gap-3 mb-5">
             <img
-              src="/logos/mk-settle-logo.png"
+              src="/logos/mk-settle-logo-new.png"
               alt="MK Settle Cars"
-              className="h-11 w-auto"
-              onError={(e) => {
-                e.target.style.display = 'none';
-                e.target.nextSibling.style.display = 'flex';
-              }}
+              className="h-16 md:h-[4.5rem] w-auto"
             />
-            <div className="w-11 h-11 border border-[#C9A962] items-center justify-center hidden">
-              <span className="text-[#C9A962] font-semibold text-sm">MK</span>
-            </div>
-            <div>
-              <p className="font-semibold">{companyInfo.name}</p>
-              <p className="text-[#C9A962] text-[10px] tracking-[0.18em] uppercase">
-                {companyInfo.tagline}
-              </p>
-            </div>
           </div>
           <p className="text-white/55 leading-relaxed max-w-md text-[15px]">
             Reliable taxi rental from Lancashire. Toyota Prius hybrids and the Kia
