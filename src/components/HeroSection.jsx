@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '../../utils';
 import { motion } from 'framer-motion';
-import { ArrowRight, Shield, Clock, Award } from 'lucide-react';
-import { companyInfo } from './carData';
 import ContactModal from './ContactModal';
 
 export default function HeroSection() {
@@ -11,137 +9,76 @@ export default function HeroSection() {
 
   return (
     <>
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920&q=80)'
-        }}
-      />
-      
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black" />
-      
-      {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#C9A962] to-transparent opacity-50" />
-
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-20">
-        <div className="max-w-3xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <span className="inline-block px-4 py-2 bg-[#C9A962]/20 border border-[#C9A962]/40 rounded-full text-[#C9A962] text-sm tracking-widest uppercase mb-8">
-              Quality Taxi Rental
-            </span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
-          >
-            Premium
-            <span className="block text-[#C9A962]">Taxi rental</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-white/70 text-lg md:text-xl leading-relaxed mb-10 max-w-xl"
-          >
-            Choose from our diverse fleet of reliable vehicles. From fuel-efficient hybrids to spacious family cars, 
-            find the right vehicle for your needs.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4"
-          >
-            <Link 
-              to={createPageUrl('Fleet')}
-              className="inline-flex items-center justify-center gap-3 bg-[#C9A962] text-black px-8 py-4 rounded-full font-semibold hover:bg-[#d4b872] transition-all group"
-            >
-              View Our Fleet
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <button 
-              onClick={() => setIsContactModalOpen(true)}
-              className="inline-flex items-center justify-center gap-3 bg-white/10 backdrop-blur-md text-white px-8 py-4 rounded-full font-semibold border border-white/20 hover:bg-white/20 transition-all"
-            >
-              Contact Us Now
-            </button>
-          </motion.div>
-        </div>
-
-        {/* Trust Badges */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
-          <div className="flex items-center gap-4 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
-            <div className="w-14 h-14 bg-[#C9A962]/20 rounded-xl flex items-center justify-center">
-              <Shield className="w-7 h-7 text-[#C9A962]" />
-            </div>
-            <div>
-              <h3 className="text-white font-semibold">Fully Insured</h3>
-              <p className="text-white/50 text-sm">Comprehensive coverage included</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
-            <div className="w-14 h-14 bg-[#C9A962]/20 rounded-xl flex items-center justify-center">
-              <Clock className="w-7 h-7 text-[#C9A962]" />
-            </div>
-            <div>
-              <h3 className="text-white font-semibold">24/7 Support</h3>
-              <p className="text-white/50 text-sm">Always here when you need us</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4 p-6 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
-            <div className="w-14 h-14 bg-[#C9A962]/20 rounded-xl flex items-center justify-center">
-              <Award className="w-7 h-7 text-[#C9A962]" />
-            </div>
-            <div>
-              <h3 className="text-white font-semibold">Quality Service</h3>
-              <p className="text-white/50 text-sm">Well-maintained vehicles</p>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-          <motion.div
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-1.5 h-1.5 bg-[#C9A962] rounded-full mt-2"
+      <section className="relative min-h-[100svh] bg-[#111] text-white overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src="/cars/hero-drive.jpg"
+            alt="Hybrid taxi on the road"
+            className="w-full h-full object-cover"
           />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/15" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/35" />
         </div>
-      </motion.div>
-    </section>
 
-    {/* Contact Modal */}
-    <ContactModal 
-      isOpen={isContactModalOpen} 
-      onClose={() => setIsContactModalOpen(false)} 
-    />
+        <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-8 pt-32 pb-20 min-h-[100svh] grid lg:grid-cols-12 gap-10 items-end lg:items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="lg:col-span-7"
+          >
+            <p className="text-[#C9A962] text-[12px] tracking-[0.22em] uppercase mb-6">
+              Lancashire taxi rental
+            </p>
+            <h1 className="font-display text-[3.4rem] sm:text-7xl lg:text-[5.4rem] leading-[0.92] mb-8 drop-shadow-[0_2px_24px_rgba(0,0,0,0.55)]">
+              Premium
+              <br />
+              hybrids.
+              <span className="block mt-2 italic text-[#C9A962]">Rented simply.</span>
+            </h1>
+            <p className="text-white/90 text-lg max-w-md leading-relaxed mb-10">
+              Toyota Prius from 2014 to 2020 and the 2021 Kia Niro, supplied for
+              private hire with plates for Wolverhampton, Sefton, Pendle and more.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link
+                to={createPageUrl('Fleet')}
+                className="inline-flex items-center justify-center bg-[#C9A962] text-[#111] px-7 py-3.5 text-[12px] font-semibold tracking-[0.14em] uppercase rounded-[7px] hover:bg-[#d4b872] transition-colors"
+              >
+                View our fleet
+              </Link>
+              <button
+                onClick={() => setIsContactModalOpen(true)}
+                className="inline-flex items-center justify-center border border-white/40 text-white px-7 py-3.5 text-[12px] font-semibold tracking-[0.14em] uppercase rounded-[7px] hover:bg-white hover:text-[#111] transition-colors"
+              >
+                Enquire now
+              </button>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="lg:col-span-5 hidden lg:block"
+          >
+            <div className="ml-auto max-w-sm border border-white/20 bg-black/30 p-6">
+              <p className="text-[11px] tracking-[0.18em] uppercase text-[#C9A962] mb-3">
+                The fleet
+              </p>
+              <p className="font-display text-3xl leading-tight mb-4">
+                Prius saloons &amp; Niro SUV
+              </p>
+              <p className="text-white/65 text-sm leading-relaxed">
+                Insurance, MOT, road tax and dash cam included. Delivery and
+                collection arranged with the team.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} />
     </>
   );
 }

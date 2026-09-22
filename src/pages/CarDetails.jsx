@@ -1,316 +1,231 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { createPageUrl } from '../../utils';
 import { motion } from 'framer-motion';
-import { 
-  ArrowLeft, 
-  Phone, 
-  Calendar, 
-  Fuel, 
-  Users, 
-  DoorOpen, 
-  Briefcase,
-  Gauge,
-  Cog,
-  Check,
-  ChevronLeft,
-  ChevronRight
-} from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CarCard from '../components/CarCard';
 import ContactModal from '../components/ContactModal';
-import { cars, companyInfo } from '../components/carData';
+import { cars, companyInfo, taxiPlates } from '../components/carData';
 
 export default function CarDetails() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const carId = parseInt(urlParams.get('id'));
-  const car = cars.find(c => c.id === carId);
+  const [searchParams] = useSearchParams();
+  const carId = parseInt(searchParams.get('id'), 10);
+  const car = cars.find((c) => c.id === carId);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
+  useEffect(() => {
+    setActiveImageIndex(0);
+    window.scrollTo(0, 0);
+  }, [carId]);
+
   if (!car) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-[#F7F7F5] flex items-center justify-center px-6">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Vehicle Not Found</h1>
-          <Link 
-            to={createPageUrl('Fleet')}
-            className="text-[#C9A962] hover:text-[#d4b872] transition-colors"
-          >
-            ← Back to Fleet
+          <h1 className="font-display text-3xl mb-4">Vehicle not found</h1>
+          <Link to={createPageUrl('Fleet')} className="text-[#666] border-b border-[#C9A962]">
+            Back to fleet
           </Link>
         </div>
       </div>
     );
   }
 
-  const allImages = car.gallery && car.gallery.length > 0 ? car.gallery : [car.image];
-  
-  // Get similar cars
-  const similarCars = cars
-    .filter(c => c.id !== car.id && c.category === car.category)
-    .slice(0, 3);
+  const allImages = car.gallery?.length ? car.gallery : [car.image];
+  const similarCars = cars.filter((c) => c.id !== car.id && c.category === car.category).slice(0, 3);
 
-  const nextImage = () => {
-    setActiveImageIndex((prev) => (prev + 1) % allImages.length);
-  };
-
-  const prevImage = () => {
+  const nextImage = () => setActiveImageIndex((prev) => (prev + 1) % allImages.length);
+  const prevImage = () =>
     setActiveImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
-  };
+
+  const sideImages = allImages.slice(1, 3);
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-[#F7F7F5] text-[#111]">
       <Header />
-      
-      {/* Back Navigation */}
-      <section className="pt-28 pb-4 bg-black">
-        <div className="max-w-7xl mx-auto px-6">
-          <Link 
+
+      <section className="pt-28 pb-6">
+        <div className="max-w-7xl mx-auto px-5 md:px-8">
+          <Link
             to={createPageUrl('Fleet')}
-            className="inline-flex items-center gap-2 text-white/60 hover:text-[#C9A962] transition-colors"
+            className="text-sm text-[#666] hover:text-[#111]"
           >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Fleet
+            ← Back to fleet
           </Link>
         </div>
       </section>
 
-      {/* Main Content */}
-      <section className="pb-16 bg-black">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Image Gallery */}
+      <section className="pb-16">
+        <div className="max-w-7xl mx-auto px-5 md:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="space-y-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="lg:col-span-7"
             >
-              {/* Main Image */}
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#1A1A1A]">
-                <img 
-                  src={allImages[activeImageIndex]} 
-                  alt={car.name}
-                  className="w-full h-full object-cover"
-                />
-                
-                {/* Image Navigation */}
-                {allImages.length > 1 && (
-                  <>
-                    <button
-                      onClick={prevImage}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/60 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-black/80 transition-colors"
-                    >
-                      <ChevronLeft className="w-5 h-5" />
-                    </button>
-                    <button
-                      onClick={nextImage}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/60 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-black/80 transition-colors"
-                    >
-                      <ChevronRight className="w-5 h-5" />
-                    </button>
-                  </>
-                )}
-
-                {/* Category Badge */}
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1.5 bg-black/60 backdrop-blur-md text-white text-xs tracking-wider uppercase rounded-full border border-white/20">
-                    {car.category}
-                  </span>
-                </div>
-
-                {/* Availability */}
-                {car.available ? (
-                  <div className="absolute top-4 right-4">
-                    <span className="px-3 py-1.5 bg-green-500/20 backdrop-blur-md text-green-400 text-xs font-medium rounded-full border border-green-500/40">
-                      Available Now
-                    </span>
-                  </div>
-                ) : (
-                  <div className="absolute top-4 right-4">
-                    <span className="px-3 py-1.5 bg-red-500/20 backdrop-blur-md text-red-400 text-xs font-medium rounded-full border border-red-500/40">
-                      Currently Reserved
-                    </span>
-                  </div>
-                )}
+              <div className="hidden md:grid grid-cols-3 grid-rows-2 gap-3 h-[520px]">
+                <button
+                  type="button"
+                  onClick={() => setActiveImageIndex(0)}
+                  className="col-span-2 row-span-2 overflow-hidden rounded-[12px] bg-[#ECECE8]"
+                >
+                  <img
+                    src={allImages[0]}
+                    alt={car.name}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+                {sideImages.map((img, i) => (
+                  <button
+                    key={img}
+                    type="button"
+                    onClick={() => setActiveImageIndex(i + 1)}
+                    className="overflow-hidden rounded-[12px] bg-[#ECECE8]"
+                  >
+                    <img src={img} alt="" className="w-full h-full object-cover" />
+                  </button>
+                ))}
               </div>
 
-              {/* Thumbnail Navigation */}
-              {allImages.length > 1 && (
-                <div className="flex gap-3 overflow-x-auto pb-2">
-                  {allImages.map((img, index) => (
+              <div className="md:hidden">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[12px] bg-[#ECECE8]">
+                  <img
+                    src={allImages[activeImageIndex]}
+                    alt={car.name}
+                    className="w-full h-full object-cover"
+                  />
+                  {allImages.length > 1 && (
+                    <>
+                      <button
+                        onClick={prevImage}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-[7px] flex items-center justify-center"
+                        aria-label="Previous image"
+                      >
+                        <ChevronLeft className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={nextImage}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-white/90 rounded-[7px] flex items-center justify-center"
+                        aria-label="Next image"
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </button>
+                    </>
+                  )}
+                </div>
+                <div className="flex justify-center gap-2 mt-4">
+                  {allImages.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => setActiveImageIndex(index)}
-                      className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${
-                        index === activeImageIndex 
-                          ? 'border-[#C9A962]' 
-                          : 'border-transparent opacity-60 hover:opacity-100'
+                      className={`h-1.5 rounded-full transition-all ${
+                        index === activeImageIndex ? 'w-6 bg-[#111]' : 'w-1.5 bg-[#CCC]'
                       }`}
-                    >
-                      <img src={img} alt="" className="w-full h-full object-cover" />
-                    </button>
+                      aria-label={`Image ${index + 1}`}
+                    />
                   ))}
                 </div>
-              )}
+              </div>
             </motion.div>
 
-            {/* Details */}
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="space-y-8"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="lg:col-span-5"
             >
-              {/* Title & Price */}
-              <div>
-                <p className="text-[#C9A962] text-sm tracking-widest uppercase mb-2">
-                  {car.brand} · {car.year}
-                </p>
-                <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                  {car.name}
-                </h1>
-                
-                <div className="flex flex-wrap gap-6">
-                  <div className="bg-[#1A1A1A] rounded-xl p-4 border border-white/10">
-                    <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Daily Rate</p>
-                    <p className="text-3xl font-bold text-white">
-                      £{car.pricePerDay}
-                      <span className="text-white/40 text-sm font-normal">/day</span>
-                    </p>
-                  </div>
-                  <div className="bg-[#1A1A1A] rounded-xl p-4 border border-white/10">
-                    <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Weekly Rate</p>
-                    <p className="text-3xl font-bold text-[#C9A962]">
-                      £{car.pricePerWeek}
-                      <span className="text-[#C9A962]/60 text-sm font-normal">/week</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
+              <p className="text-[11px] tracking-[0.18em] uppercase text-[#C9A962] mb-2">
+                {car.brand} · {car.category}
+              </p>
+              <h1 className="font-display text-4xl md:text-5xl mb-6">{car.name}</h1>
 
-              {/* Description */}
-              <div>
-                <h2 className="text-lg font-semibold text-white mb-3">About This Vehicle</h2>
-                <p className="text-white/70 leading-relaxed">
-                  {car.description}
-                </p>
-              </div>
+              <p className="text-3xl font-semibold mb-8">
+                £{car.pricePerWeek}
+                <span className="text-base font-normal text-[#888]"> / week</span>
+              </p>
 
-              {/* Key Specs Grid */}
-              <div>
-                <h2 className="text-lg font-semibold text-white mb-4">Key Specifications</h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  <div className="bg-[#1A1A1A] rounded-xl p-4 text-center border border-white/5">
-                    <Fuel className="w-5 h-5 text-[#C9A962] mx-auto mb-2" />
-                    <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Fuel</p>
-                    <p className="text-white font-medium text-sm">{car.specs.fuelType}</p>
-                  </div>
-                  <div className="bg-[#1A1A1A] rounded-xl p-4 text-center border border-white/5">
-                    <Gauge className="w-5 h-5 text-[#C9A962] mx-auto mb-2" />
-                    <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Power</p>
-                    <p className="text-white font-medium text-sm">{car.specs.horsepower}</p>
-                  </div>
-                  <div className="bg-[#1A1A1A] rounded-xl p-4 text-center border border-white/5">
-                    <Cog className="w-5 h-5 text-[#C9A962] mx-auto mb-2" />
-                    <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Transmission</p>
-                    <p className="text-white font-medium text-sm">{car.specs.transmission.split(' ')[0]}</p>
-                  </div>
-                  <div className="bg-[#1A1A1A] rounded-xl p-4 text-center border border-white/5">
-                    <Users className="w-5 h-5 text-[#C9A962] mx-auto mb-2" />
-                    <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Seats</p>
-                    <p className="text-white font-medium text-sm">{car.specs.seats} Passengers</p>
-                  </div>
-                </div>
-              </div>
+              <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-[15px] text-[#444] mb-8 pb-8 border-b border-[#E4E4E0]">
+                <li>Automatic</li>
+                <li>{car.specs.seats} seats</li>
+                <li>{car.specs.fuelType}</li>
+                <li>{car.specs.doors} doors</li>
+                <li>{car.specs.engine}</li>
+                <li>{car.specs.mpg}</li>
+              </ul>
 
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <button 
-                  onClick={() => setIsContactModalOpen(true)}
-                  className="flex-1 inline-flex items-center justify-center gap-3 bg-[#C9A962] text-black px-8 py-4 rounded-full font-semibold hover:bg-[#d4b872] transition-all"
+              <h2 className="text-sm font-semibold tracking-wide uppercase mb-3">
+                About this vehicle
+              </h2>
+              <p className="text-[#555] leading-relaxed mb-8">{car.description}</p>
+
+              <h2 className="text-sm font-semibold tracking-wide uppercase mb-3">
+                Taxi plates available
+              </h2>
+              <p className="text-[#555] text-sm leading-relaxed mb-8">
+                {taxiPlates.join(', ')}. Let us know which plate you need when you enquire.
+              </p>
+
+              <button
+                onClick={() => setIsContactModalOpen(true)}
+                className="w-full bg-[#111] text-white py-4 text-[12px] font-semibold tracking-[0.14em] uppercase rounded-[7px] hover:bg-[#C9A962] hover:text-black transition-colors"
+              >
+                Enquire about this vehicle
+              </button>
+              <p className="text-xs text-[#888] mt-3">
+                Or call {companyInfo.phones[0].display}
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 border-t border-[#E4E4E0]">
+        <div className="max-w-7xl mx-auto px-5 md:px-8 grid md:grid-cols-2 gap-12">
+          <div>
+            <h2 className="font-display text-3xl mb-6">Specifications</h2>
+            <dl>
+              {[
+                ['Engine', car.specs.engine],
+                ['Power', car.specs.horsepower],
+                ['Transmission', car.specs.transmission],
+                ['Fuel', car.specs.fuelType],
+                ['Seats', `${car.specs.seats}`],
+                ['Doors', `${car.specs.doors}`],
+                ['Luggage', car.specs.luggage],
+                ['Economy', car.specs.mpg],
+              ].map(([label, value], index, arr) => (
+                <div
+                  key={label}
+                  className={`flex justify-between py-3 ${
+                    index !== arr.length - 1 ? 'border-b border-[#E8E8E8]' : ''
+                  }`}
                 >
-                  <Phone className="w-5 h-5" />
-                  Book Now
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-      
-
-      {/* Full Specs Section */}
-      <section className="py-16 bg-[#0A0A0A]">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Technical Specs */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-2xl font-bold text-white mb-6">Technical Specifications</h2>
-              <div className="bg-[#1A1A1A] rounded-2xl border border-white/5 overflow-hidden">
-                {[
-                  { label: 'Engine', value: car.specs.engine, icon: Cog },
-                  { label: 'Horsepower', value: car.specs.horsepower, icon: Gauge },
-                  { label: 'Transmission', value: car.specs.transmission, icon: Cog },
-                  { label: 'Fuel Type', value: car.specs.fuelType, icon: Fuel },
-                  { label: 'Seating Capacity', value: `${car.specs.seats} Passengers`, icon: Users },
-                  { label: 'Doors', value: `${car.specs.doors} Doors`, icon: DoorOpen },
-                  { label: 'Luggage Capacity', value: car.specs.luggage, icon: Briefcase },
-                  { label: 'Fuel Economy', value: car.specs.mpg, icon: Fuel },
-                ].map((spec, index) => (
-                  <div 
-                    key={spec.label}
-                    className={`flex items-center justify-between p-4 ${
-                      index !== 7 ? 'border-b border-white/5' : ''
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <spec.icon className="w-4 h-4 text-[#C9A962]" />
-                      <span className="text-white/60">{spec.label}</span>
-                    </div>
-                    <span className="text-white font-medium">{spec.value}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Features */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-            >
-              <h2 className="text-2xl font-bold text-white mb-6">Features & Equipment</h2>
-              <div className="bg-[#1A1A1A] rounded-2xl border border-white/5 p-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {car.features.map((feature) => (
-                    <div key={feature} className="flex items-center gap-3">
-                      <div className="w-6 h-6 rounded-full bg-[#C9A962]/20 flex items-center justify-center flex-shrink-0">
-                        <Check className="w-3.5 h-3.5 text-[#C9A962]" />
-                      </div>
-                      <span className="text-white/80">{feature}</span>
-                    </div>
-                  ))}
+                  <dt className="text-[#888]">{label}</dt>
+                  <dd className="text-[#111]">{value}</dd>
                 </div>
-              </div>
-            </motion.div>
+              ))}
+            </dl>
+          </div>
+          <div>
+            <h2 className="font-display text-3xl mb-6">Equipment</h2>
+            <ul className="space-y-3">
+              {car.features.map((feature) => (
+                <li key={feature} className="text-[#444] border-b border-[#EFEFEF] pb-3">
+                  {feature}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
-      
 
-      {/* Similar Cars */}
       {similarCars.length > 0 && (
-        <section className="py-16 bg-black">
-          <div className="max-w-7xl mx-auto px-6">
-            <h2 className="text-2xl font-bold text-white mb-8">Similar Vehicles</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <section className="py-16">
+          <div className="max-w-7xl mx-auto px-5 md:px-8">
+            <h2 className="font-display text-3xl mb-8">Other vehicles</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
               {similarCars.map((similarCar, index) => (
                 <CarCard key={similarCar.id} car={similarCar} index={index} />
               ))}
@@ -321,10 +236,10 @@ export default function CarDetails() {
 
       <Footer />
 
-      {/* Contact Modal */}
-      <ContactModal 
-        isOpen={isContactModalOpen} 
-        onClose={() => setIsContactModalOpen(false)} 
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+        vehicleName={car.name}
       />
     </div>
   );

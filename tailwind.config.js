@@ -7,7 +7,12 @@ export default {
     "./components/**/*.{js,jsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        sans: ['Manrope', 'system-ui', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 }

@@ -1,98 +1,75 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '../../utils';
 import { motion } from 'framer-motion';
-import { Fuel, Users, Gauge, Calendar, ChevronRight } from 'lucide-react';
+import ContactModal from './ContactModal';
 
 export default function CarCard({ car, index = 0 }) {
+  const [enquireOpen, setEnquireOpen] = useState(false);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-    >
-      <Link 
-        to={createPageUrl(`CarDetails?id=${car.id}`)}
-        className="group block bg-[#1A1A1A] rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-[#C9A962]/10 transition-all duration-500"
+    <>
+      <motion.article
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.45, delay: Math.min(index * 0.06, 0.3) }}
+        className="group bg-white border border-[#E4E4E0] rounded-[10px] overflow-hidden"
       >
-        {/* Image Container */}
-        <div className="relative aspect-[16/10] overflow-hidden">
-          <img 
-            src={car.image} 
-            alt={car.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-          />
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent" />
-          
-          {/* Category Badge */}
-          <div className="absolute top-4 left-4">
-            <span className="px-3 py-1.5 bg-black/60 backdrop-blur-md text-white text-xs tracking-wider uppercase rounded-full border border-white/20">
-              {car.category}
-            </span>
+        <Link to={createPageUrl(`CarDetails?id=${car.id}`)} className="block">
+          <div className="relative aspect-[16/10] overflow-hidden bg-[#ECECE8]">
+            <img
+              src={car.image}
+              alt={car.name}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+            />
           </div>
-
-          {/* Year Badge */}
-          <div className="absolute top-4 right-4">
-            <span className="px-3 py-1.5 bg-[#C9A962] text-black text-xs font-semibold rounded-full flex items-center gap-1">
-              <Calendar className="w-3 h-3" />
-              {car.year}
-            </span>
-          </div>
-
-          {/* Availability Badge */}
-          {!car.available && (
-            <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
-              <span className="text-white text-lg font-medium">Currently Reserved</span>
-            </div>
-          )}
-        </div>
-
-        {/* Content */}
-        <div className="p-6">
-          {/* Brand */}
-          <p className="text-[#C9A962] text-sm tracking-widest uppercase mb-1">
-            {car.brand}
+        </Link>
+        <div className="p-5 md:p-6">
+          <p className="text-[11px] tracking-[0.16em] uppercase text-[#888] mb-1">
+            {car.category} · {car.year}
           </p>
-          
-          {/* Name */}
-          <h3 className="text-white text-xl font-semibold mb-4 group-hover:text-[#C9A962] transition-colors">
+          <h3 className="font-display text-[1.65rem] leading-tight text-[#111] mb-2">
             {car.name}
           </h3>
-
-          {/* Quick Specs */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
-            <div className="flex flex-col items-center p-3 bg-black/40 rounded-xl">
-              <Fuel className="w-4 h-4 text-[#C9A962] mb-1" />
-              <span className="text-white/60 text-xs">{car.specs.fuelType}</span>
-            </div>
-            <div className="flex flex-col items-center p-3 bg-black/40 rounded-xl">
-              <Users className="w-4 h-4 text-[#C9A962] mb-1" />
-              <span className="text-white/60 text-xs">{car.specs.seats} Seats</span>
-            </div>
-            <div className="flex flex-col items-center p-3 bg-black/40 rounded-xl">
-              <Gauge className="w-4 h-4 text-[#C9A962] mb-1" />
-              <span className="text-white/60 text-xs">{car.specs.horsepower}</span>
-            </div>
-          </div>
-
-          {/* Price & CTA */}
-          <div className="flex items-end justify-between pt-4 border-t border-white/10">
+          <p className="text-[#666] text-sm leading-relaxed mb-4 line-clamp-2">
+            {car.description}
+          </p>
+          <p className="text-[13px] text-[#444] mb-5">
+            {car.specs.transmission.split(' ')[0]} · {car.specs.seats} seats ·{' '}
+            {car.specs.fuelType} · {car.specs.doors} doors
+          </p>
+          <div className="flex items-end justify-between gap-4 pt-4 border-t border-[#EDEDED]">
             <div>
-              <p className="text-white/40 text-xs uppercase tracking-wider mb-1">From</p>
-              <p className="text-white text-2xl font-bold">
+              <p className="text-[11px] uppercase tracking-wider text-[#888] mb-0.5">From</p>
+              <p className="text-xl font-semibold text-[#111]">
                 £{car.pricePerWeek}
-                <span className="text-white/40 text-sm font-normal">/Week</span>
+                <span className="text-sm font-normal text-[#888]"> / week</span>
               </p>
             </div>
-            <div className="flex items-center gap-1 text-[#C9A962] text-sm font-medium group-hover:gap-2 transition-all">
-              View Details
-              <ChevronRight className="w-4 h-4" />
+            <div className="flex flex-col items-end gap-2">
+              <Link
+                to={createPageUrl(`CarDetails?id=${car.id}`)}
+                className="text-[12px] font-semibold tracking-[0.12em] uppercase text-[#111] border-b border-[#C9A962] pb-0.5"
+              >
+                View details
+              </Link>
+              <button
+                onClick={() => setEnquireOpen(true)}
+                className="text-[12px] font-semibold tracking-[0.12em] uppercase text-[#888] hover:text-[#111]"
+              >
+                Enquire
+              </button>
             </div>
           </div>
         </div>
-      </Link>
-    </motion.div>
+      </motion.article>
+
+      <ContactModal
+        isOpen={enquireOpen}
+        onClose={() => setEnquireOpen(false)}
+        vehicleName={car.name}
+      />
+    </>
   );
 }

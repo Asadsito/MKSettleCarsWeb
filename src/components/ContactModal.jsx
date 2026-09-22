@@ -1,77 +1,69 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mail, Phone } from 'lucide-react';
+import { X } from 'lucide-react';
 import { companyInfo } from './carData';
 
-export default function ContactModal({ isOpen, onClose }) {
-  if (!isOpen) return null;
-
+export default function ContactModal({ isOpen, onClose, vehicleName = '' }) {
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/55 z-[60]"
           />
-          
-          {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            className="fixed inset-0 z-[70] flex items-start sm:items-center justify-center p-4 overflow-y-auto"
           >
-            <div className="bg-[#1A1A1A] border border-white/10 rounded-2xl p-8 max-w-md w-full relative">
-              {/* Close Button */}
+            <div className="bg-white border border-[#DCDCDC] shadow-[0_24px_80px_rgba(0,0,0,0.28)] rounded-[10px] p-6 sm:p-8 max-w-md w-full relative my-6">
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-colors text-white/60 hover:text-white"
+                className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-[#666] hover:text-[#111]"
+                aria-label="Close"
               >
                 <X className="w-5 h-5" />
               </button>
-
-              {/* Content */}
-              <div className="text-center">
-                <h2 className="text-2xl font-bold text-white mb-2">
-                  Get In Touch
-                </h2>
-
-                <p className="text-sm text-white/60 mb-6">
-                  NOTE: Prices may vary depending on the state of your license and age.
-                </p>
-
-                <div className="space-y-4">
-
-                  {/* Email */}
-                  <a 
+              <p className="text-[11px] tracking-[0.18em] uppercase text-[#C9A962] mb-2">
+                Contact
+              </p>
+              <h2 className="font-display text-3xl text-[#111] mb-2">Get in touch</h2>
+              <p className="text-[#666] text-sm mb-6">
+                {vehicleName
+                  ? `Call or email us about the ${vehicleName}.`
+                  : 'Call or email us and we will handle the rental directly.'}
+              </p>
+              <div className="space-y-5 text-sm">
+                <div>
+                  <p className="text-[11px] uppercase tracking-wider text-[#888] mb-1">Phone</p>
+                  {companyInfo.phones.map((p) => (
+                    <p key={p.href}>
+                      <a href={p.href} className="text-[#111] text-lg hover:text-[#C9A962]">
+                        {p.display}
+                      </a>
+                    </p>
+                  ))}
+                </div>
+                <div>
+                  <p className="text-[11px] uppercase tracking-wider text-[#888] mb-1">Email</p>
+                  <a
                     href={`mailto:${companyInfo.email}`}
-                    className="flex items-center justify-center gap-3 p-4 bg-[#C9A962]/10 border border-[#C9A962]/30 rounded-xl hover:bg-[#C9A962]/20 transition-all group"
+                    className="text-[#111] text-lg hover:text-[#C9A962] break-all"
                   >
-                    <Mail className="w-5 h-5 text-[#C9A962]" />
-                    <div className="text-left">
-                      <p className="text-white/60 text-xs">Enquire at:</p>
-                      <p className="text-white font-medium">{companyInfo.email}</p>
-                    </div>
-                  </a>
-
-                  {/* Phone */}
-                  <a 
-                    href={`tel:${companyInfo.phone}`}
-                    className="flex items-center justify-center gap-3 p-4 bg-[#C9A962]/10 border border-[#C9A962]/30 rounded-xl hover:bg-[#C9A962]/20 transition-all group"
-                  >
-                    <Phone className="w-5 h-5 text-[#C9A962]" />
-                    <div className="text-left">
-                      <p className="text-white/60 text-xs">Call us:</p>
-                      <p className="text-white font-medium">{companyInfo.phone}</p>
-                    </div>
+                    {companyInfo.email}
                   </a>
                 </div>
+                <div>
+                  <p className="text-[11px] uppercase tracking-wider text-[#888] mb-1">Based in</p>
+                  <p className="text-[#111] text-lg">{companyInfo.address}</p>
+                </div>
               </div>
+              <p className="text-xs text-[#888] mt-6">{companyInfo.openingHours}</p>
             </div>
           </motion.div>
         </>
